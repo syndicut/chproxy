@@ -159,6 +159,8 @@ type TimeoutCfg struct {
 type HTTP struct {
 	// TCP address to listen to for http
 	ListenAddr string `yaml:"listen_addr"`
+	// Whether to listen on ipv6 address
+	EnableTCP6 bool `yaml:"enable_tcp6"`
 
 	NetworksOrGroups NetworksOrGroups `yaml:"allowed_networks,omitempty"`
 
@@ -198,6 +200,8 @@ type HTTPS struct {
 	// TCP address to listen to for https
 	// Default is `:443`
 	ListenAddr string `yaml:"listen_addr,omitempty"`
+	// Whether to listen on ipv6 address
+	EnableTCP6 bool `yaml:"enable_tcp6"`
 
 	// Certificate and key files for client cert authentication to the server
 	CertFile string `yaml:"cert_file,omitempty"`

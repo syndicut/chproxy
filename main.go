@@ -114,8 +114,12 @@ func newAutocertManager(cfg config.Autocert) *autocert.Manager {
 	}
 }
 
-func newListener(listenAddr string) net.Listener {
-	ln, err := net.Listen("tcp4", listenAddr)
+func newListener(listenAddr string, enableTCP6 bool) net.Listener {
+	network := "tcp4"
+	if enableTCP6 {
+		network = "tcp"
+	}
+	ln, err := net.Listen(network, listenAddr)
 	if err != nil {
 		log.Fatalf("cannot listen for %q: %s", listenAddr, err)
 	}
@@ -123,7 +127,7 @@ func newListener(listenAddr string) net.Listener {
 }
 
 func serveTLS(cfg config.HTTPS) {
-	ln := newListener(cfg.ListenAddr)
+	ln := newListener(cfg.ListenAddr, cfg.EnableTCP6)
 	h := http.HandlerFunc(serveHTTP)
 	tlsCfg := newTLSConfig(cfg)
 	tln := tls.NewListener(ln, tlsCfg)
@@ -135,7 +139,7 @@ func serveTLS(cfg config.HTTPS) {
 
 func serve(cfg config.HTTP) {
 	var h http.Handler
-	ln := newListener(cfg.ListenAddr)
+	ln := newListener(cfg.ListenAddr, cfg.EnableTCP6)
 	h = http.HandlerFunc(serveHTTP)
 	if cfg.ForceAutocertHandler {
 		if autocertManager == nil {

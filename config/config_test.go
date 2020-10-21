@@ -476,6 +476,10 @@ func TestExamples(t *testing.T) {
 			"combined",
 			"examples/combined.yml",
 		},
+		{
+			"enable tcp6",
+			"examples/enable_tcp6.yml",
+		},
 	}
 
 	for _, tc := range testCases {
